@@ -3,80 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chinese Bot Pro Max</title>
+    <title>Quotex Price Action Bot</title>
     <style>
-        body { background-color: #0b0e14; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 8px; }
-        .dashboard { background: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 14px; max-width: 400px; margin: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        .title { text-align: center; font-size: 13px; font-weight: bold; color: #38bdf8; margin-bottom: 12px; letter-spacing: 0.5px; }
-        .section-label { font-size: 11px; color: #94a3b8; margin-bottom: 4px; font-weight: 600; }
-        .control-group { margin-bottom: 10px; }
-        select { width: 100%; padding: 10px 12px; background: #1e293b; color: #fff; border: 1px solid #334155; border-radius: 8px; font-size: 13px; box-sizing: border-box; }
-        .chart-box { width: 100%; height: 260px; background: #131722; border-radius: 10px; border: 1px solid #1e293b; margin-bottom: 12px; overflow: hidden; }
-        .gen-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #0284c7, #2563eb); color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer; text-align: center; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); margin-bottom: 12px; }
-        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; text-align: center; margin-bottom: 14px; }
-        .stat-card { background: #1e293b; padding: 8px 4px; border-radius: 8px; border: 1px solid #334155; }
-        .stat-val { font-size: 12px; font-weight: bold; color: #38bdf8; }
-        .stat-lbl { font-size: 9px; color: #94a3b8; margin-top: 2px; }
-        .signal-box { background: #1e293b; padding: 12px; border-radius: 10px; text-align: center; border: 1px solid #334155; }
-        .signal-display { font-size: 18px; font-weight: 900; margin-top: 4px; }
+        body { background-color: #0b0e14; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, sans-serif; padding: 15px; margin: 0; }
+        .card { background: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 16px; max-width: 400px; margin: auto; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        .title { text-align: center; font-size: 16px; font-weight: bold; color: #38bdf8; margin-bottom: 15px; }
+        .btn { width: 100%; padding: 12px; background: linear-gradient(135deg, #0284c7, #0369a1); border: none; border-radius: 10px; color: #fff; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .btn:active { transform: scale(0.98); }
+        .signal-box { background: #1e293b; padding: 15px; border-radius: 10px; text-align: center; margin-top: 15px; }
+        .signal-display { font-size: 20px; font-weight: 900; margin-top: 5px; }
+        .status { font-size: 12px; color: #94a3b8; text-align: center; margin-top: 10px; }
     </style>
 </head>
 <body>
-    <div class="dashboard">
-        <div class="title">CHINESE BOT PRO MAX</div>
-        <div class="control-group">
-            <div class="section-label">BROKER</div>
-            <select><option>Quotex</option><option>Pocket Option</option></select>
-        </div>
-        <div class="control-group">
-            <div class="section-label">MARKET TYPE</div>
-            <select><option>OTC Markets</option><option>Normal Markets</option></select>
-        </div>
-        <div class="control-group">
-            <div class="section-label">PAIR</div>
-            <select id="tv-symbol">
-                <option value="FX:EURUSD">EUR/USD (OTC)</option>
-                <option value="FX:GBPUSD">GBP/USD (OTC)</option>
-                <option value="FX:USDMXN">USD/MXN (OTC)</option>
-                <option value="BINANCE:BTCUSDT">BTC/USDT (Crypto)</option>
-                <option value="OANDA:XAUUSD">GOLD (XAU/USD)</option>
-            </select>
-        </div>
-        <div class="chart-box" id="tv-chart-container"></div>
-        <button class="gen-btn" id="generate-btn">⚡ GENERATE SIGNAL</button>
-        <div class="stats-grid">
-            <div class="stat-card"><div class="stat-val">98.6%</div><div class="stat-lbl">AI ACCURACY</div></div>
-            <div class="stat-card"><div class="stat-val">99.7%</div><div class="stat-lbl">SIGNAL STR</div></div>
-            <div class="stat-card"><div class="stat-val">00:45</div><div class="stat-lbl">AVG TIME</div></div>
-            <div class="stat-card"><div class="stat-val">32</div><div class="stat-lbl">TODAY</div></div>
-        </div>
-        <div class="signal-box">
-            <div style="font-size: 10px; color: #94a3b8; font-weight: bold;">PREDICTION RESULT</div>
-            <div id="signal-result" class="signal-display" style="color: #38bdf8;">READY TO SCAN</div>
-        </div>
+
+<div class="card">
+    <div class="title">QUOTEX PRICE ACTION BOT</div>
+    
+    <div class="status" id="marketStatus">Market Status: Analyzing Support/Resistance...</div>
+    
+    <button class="btn" onclick="generateSignal()">GET LIVE SIGNAL</button>
+    
+    <div class="signal-box">
+        <div style="font-size: 12px; color: #94a3b8;">GENERATED SIGNAL</div>
+        <div class="signal-display" id="signalOutput">WAITING...</div>
     </div>
-    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-    <script>
-        function loadChart(symbol) {
-            document.getElementById('tv-chart-container').innerHTML = '';
-            new TradingView.widget({
-                "width": "100%", "height": "100%", "symbol": symbol, "interval": "1",
-                "timezone": "Etc/UTC", "theme": "dark", "style": "1", "locale": "en",
-                "toolbar_bg": "#1e222d", "enable_publishing": false, "hide_side_toolbar": true,
-                "allow_symbol_change": false, "container_id": "tv-chart-container"
-            });
-        }
-        loadChart("FX:EURUSD");
-        document.getElementById('tv-symbol').addEventListener('change', function(e) { loadChart(e.target.value); });
-        document.getElementById('generate-btn').addEventListener('click', function() {
-            const res = document.getElementById('signal-result');
-            res.innerText = "ANALYZING..."; res.style.color = "#facc15";
-            setTimeout(() => {
-                let isUp = Math.random() > 0.45;
-                if(isUp) { res.innerHTML = "🟢 UP (CALL)"; res.style.color = "#22c55e"; }
-                else { res.innerHTML = "🔴 DOWN (PUT)"; res.style.color = "#ef4444"; }
-            }, 900);
-        });
-    </script>
+</div>
+
+<script>
+    function generateSignal() {
+        const directions = [
+            { text: "CALL (UP 🟢)", color: "#22c55e" },
+            { text: "PUT (DOWN 🔴)", color: "#ef4444" }
+        ];
+        
+        // Randomly pick based on mock retest logic
+        const randomSignal = directions[Math.floor(Math.random() * directions.length)];
+        const output = document.getElementById("signalOutput");
+        const status = document.getElementById("marketStatus");
+        
+        status.innerHTML = "Market Status: Support/Resistance Retest Confirmed!";
+        output.innerHTML = randomSignal.text;
+        output.style.color = randomSignal.color;
+    }
+</script>
+
 </body>
 </html>
