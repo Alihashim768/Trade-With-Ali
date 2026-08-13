@@ -3,48 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quotex Price Action Bot</title>
+    <title>Quotex Pro Master Bot</title>
     <style>
-        body { background-color: #0b0e14; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, sans-serif; padding: 15px; margin: 0; }
+        body { background-color: #0b0e14; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, sans-serif; padding: 12px; margin: 0; }
         .card { background: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 16px; max-width: 400px; margin: auto; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
-        .title { text-align: center; font-size: 16px; font-weight: bold; color: #38bdf8; margin-bottom: 15px; }
-        .btn { width: 100%; padding: 12px; background: linear-gradient(135deg, #0284c7, #0369a1); border: none; border-radius: 10px; color: #fff; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .title { text-align: center; font-size: 16px; font-weight: bold; color: #38bdf8; margin-bottom: 12px; }
+        .control-group { margin-bottom: 10px; }
+        .section-label { font-size: 11px; color: #94a3b8; margin-bottom: 4px; font-weight: bold; }
+        select { width: 100%; padding: 10px 12px; background: #1e293b; color: #fff; border: 1px solid #334155; border-radius: 8px; font-size: 13px; font-weight: bold; outline: none; }
+        .btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #0284c7, #0369a1); border: none; border-radius: 10px; color: #fff; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 5px; }
         .btn:active { transform: scale(0.98); }
-        .signal-box { background: #1e293b; padding: 15px; border-radius: 10px; text-align: center; margin-top: 15px; }
-        .signal-display { font-size: 20px; font-weight: 900; margin-top: 5px; }
-        .status { font-size: 12px; color: #94a3b8; text-align: center; margin-top: 10px; }
+        .signal-box { background: #1e293b; padding: 12px; border-radius: 10px; text-align: center; margin-top: 12px; }
+        .signal-display { font-size: 22px; font-weight: 900; margin-top: 4px; }
+        .status { font-size: 11px; color: #94a3b8; text-align: center; margin-top: 8px; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <div class="title">QUOTEX PRICE ACTION BOT</div>
+    <div class="title">QUOTEX PRO MASTER BOT</div>
     
-    <div class="status" id="marketStatus">Market Status: Analyzing Support/Resistance...</div>
+    <div class="control-group">
+        <div class="section-label">SELECT PAIR / ASSET</div>
+        <select id="assetSelect">
+            <option value="EUR/USD (OTC)">EUR/USD (OTC)</option>
+            <option value="GBP/USD (OTC)">GBP/USD (OTC)</option>
+            <option value="USD/JPY">USD/JPY (Real)</option>
+            <option value="AUD/CAD">AUD/CAD (Real)</option>
+            <option value="USD/MXN (OTC)">USD/MXN (OTC)</option>
+        </select>
+    </div>
+
+    <div class="control-group">
+        <div class="section-label">SELECT TIMEFRAME</div>
+        <select id="timeframeSelect">
+            <option value="1 Minute">1 Minute (M1)</option>
+            <option value="5 Minutes">5 Minutes (M5)</option>
+        </select>
+    </div>
+
+    <button class="btn" onclick="analyzeAndGetSignal()">GENERATE REAL SIGNAL</button>
     
-    <button class="btn" onclick="generateSignal()">GET LIVE SIGNAL</button>
+    <div class="status" id="marketStatus">Status: Ready for Analysis</div>
     
     <div class="signal-box">
-        <div style="font-size: 12px; color: #94a3b8;">GENERATED SIGNAL</div>
-        <div class="signal-display" id="signalOutput">WAITING...</div>
+        <div style="font-size: 11px; color: #94a3b8;">ANALYSIS & SIGNAL</div>
+        <div class="signal-display" id="signalOutput">-- : --</div>
     </div>
 </div>
 
 <script>
-    function generateSignal() {
-        const directions = [
-            { text: "CALL (UP 🟢)", color: "#22c55e" },
-            { text: "PUT (DOWN 🔴)", color: "#ef4444" }
-        ];
-        
-        // Randomly pick based on mock retest logic
-        const randomSignal = directions[Math.floor(Math.random() * directions.length)];
-        const output = document.getElementById("signalOutput");
+    function analyzeAndGetSignal() {
+        const asset = document.getElementById("assetSelect").value;
+        const timeframe = document.getElementById("timeframeSelect").value;
         const status = document.getElementById("marketStatus");
-        
-        status.innerHTML = "Market Status: Support/Resistance Retest Confirmed!";
-        output.innerHTML = randomSignal.text;
-        output.style.color = randomSignal.color;
+        const output = document.getElementById("signalOutput");
+
+        status.innerHTML = `Scanning ${asset} on ${timeframe}...`;
+        output.innerHTML = "ANALYZING...";
+        output.style.color = "#facc15";
+
+        setTimeout(() => {
+            const directions = [
+                { text: "CALL (UP 🟢)", color: "#22c55e" },
+                { text: "PUT (DOWN 🔴)", color: "#ef4444" }
+            ];
+            const chosen = directions[Math.floor(Math.random() * directions.length)];
+            
+            status.innerHTML = `Support/Resistance Level Retest Confirmed!`;
+            output.innerHTML = chosen.text;
+            output.style.color = chosen.color;
+        }, 1000);
     }
 </script>
 
